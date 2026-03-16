@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGATEC PARTS MANAGER</title>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-microchip"></i>
+                <h2>SGATEC</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+                    <li data-section="form"><i class="fas fa-plus-circle"></i> Cadastrar Peça</li>
+                    <li data-section="list"><i class="fas fa-list"></i> Listagem</li>
+                    <li data-section="config"><i class="fas fa-cog"></i> Configurações</li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <p>© 2026 SGATEC</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Dashboard -->
+            <section id="dashboard" class="section active">
+                <h1><i class="fas fa-chart-pie"></i> Dashboard</h1>
+                <div class="cards">
+                    <div class="card"><h3>Total de Peças</h3><p id="totalPecas">0</p></div>
+                    <div class="card"><h3>Valor Total Estoque</h3><p id="valorEstoque">R$ 0,00</p></div>
+                    <div class="card"><h3>Peças Vendidas</h3><p id="pecasVendidas">0</p></div>
+                    <div class="card"><h3>Peças Disponíveis</h3><p id="pecasDisponiveis">0</p></div>
+                    <div class="card"><h3>Lucro Estimado</h3><p id="lucroEstimado">R$ 0,00</p></div>
+                    <div class="card"><h3>Valor Médio por Peça</h3><p id="valorMedio">R$ 0,00</p></div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-container">
+                        <canvas id="chartCategoria"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chartLucroMensal"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chartTipoEquip"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chartMarketplace"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Formulário de Cadastro -->
+            <section id="form" class="section">
+                <h1><i class="fas fa-edit"></i> Cadastrar Peça</h1>
+                <form id="partForm">
+                    <input type="hidden" id="partId" value="">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nome da Peça *</label>
+                            <input type="text" id="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria *</label>
+                            <select id="categoria" required>
+                                <option value="">Selecione</option>
+                                <option value="Placa Mãe">Placa Mãe</option>
+                                <option value="Processador">Processador</option>
+                                <option value="Memória">Memória</option>
+                                <option value="HD/SSD">HD/SSD</option>
+                                <option value="Fonte">Fonte</option>
+                                <option value="Teclado">Teclado</option>
+                                <option value="Mouse">Mouse</option>
+                                <option value="Monitor">Monitor</option>
+                                <option value="Impressora">Impressora</option>
+                                <option value="Placa de Vídeo">Placa de Vídeo</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo Equipamento *</label>
+                            <select id="tipoEquip" required>
+                                <option value="computador">Computador</option>
+                                <option value="notebook">Notebook</option>
+                                <option value="monitor">Monitor</option>
+                                <option value="impressora">Impressora</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <input type="text" id="marca">
+                        </div>
+                        <div class="form-group">
+                            <label>Modelo</label>
+                            <input type="text" id="modelo">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Descrição Técnica</label>
+                            <textarea id="descTecnica" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Condição *</label>
+                            <select id="condicao" required>
+                                <option value="usado testado">Usado testado</option>
+                                <option value="usado para retirada">Usado para retirada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Origem</label>
+                            <select id="origem">
+                                <option value="sucata">Sucata</option>
+                                <option value="manutenção">Manutenção</option>
+                                <option value="compra">Compra</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>NCM *</label>
+                            <input type="text" id="ncm" readonly class="suggested" placeholder="Sugerido autom.">
+                        </div>
+                        <div class="form-group">
+                            <label>Preço de Custo (R$) *</label>
+                            <input type="number" step="0.01" id="precoCusto" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Preço de Venda (R$) *</label>
+                            <input type="number" step="0.01" id="precoVenda" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Marketplace</label>
+                            <input type="text" id="marketplace" placeholder="Ex: Mercado Livre">
+                        </div>
+                        <div class="form-group">
+                            <label>Status *</label>
+                            <select id="status" required>
+                                <option value="estoque">Estoque</option>
+                                <option value="vendido">Vendido</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Imagem</label>
+                            <input type="file" id="imagem" accept="image/*">
+                            <div id="imagePreview"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="gerarDescricaoBtn" class="btn secondary"><i class="fas fa-magic"></i> Gerar Descrição</button>
+                        <button type="submit" class="btn primary"><i class="fas fa-save"></i> Salvar Peça</button>
+                        <button type="button" id="cancelEdit" class="btn secondary">Cancelar</button>
+                    </div>
+                    <div id="descricaoGerada" class="generated-desc"></div>
+                </form>
+            </section>
+
+            <!-- Listagem -->
+            <section id="list" class="section">
+                <h1><i class="fas fa-table"></i> Listagem de Peças</h1>
+                <div class="list-controls">
+                    <input type="text" id="searchInput" placeholder="Buscar...">
+                    <select id="filterStatus">
+                        <option value="">Todos Status</option>
+                        <option value="estoque">Estoque</option>
+                        <option value="vendido">Vendido</option>
+                    </select>
+                    <select id="filterCategoria">
+                        <option value="">Todas Categorias</option>
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table id="partsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Imagem</th>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Tipo</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Condição</th>
+                                <th>Custo</th>
+                                <th>Venda</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Configurações (Export/Import) -->
+            <section id="config" class="section">
+                <h1><i class="fas fa-database"></i> Configurações</h1>
+                <div class="config-options">
+                    <div class="config-card">
+                        <h3>Exportar Dados</h3>
+                        <button id="exportJSON" class="btn primary"><i class="fas fa-file-code"></i> Exportar JSON</button>
+                        <button id="exportCSV" class="btn primary"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+                    </div>
+                    <div class="config-card">
+                        <h3>Importar Backup</h3>
+                        <input type="file" id="importFile" accept=".json">
+                        <button id="importJSON" class="btn primary"><i class="fas fa-upload"></i> Importar JSON</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
